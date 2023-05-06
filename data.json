@@ -1,0 +1,13 @@
+{
+    "nodes": ["VH", "ATB", "Novus", "Silpo"],
+    "weights": {"ATB": 6, "Novus": 5, "Silpo": 2},
+    "start": "VH",
+    "edges": [
+        {"source": "ATB", "target": "Novus", "distance": 2},
+        {"source": "ATB", "target": "Silpo", "distance": 11},
+        {"source": "Novus", "target": "Silpo", "distance": 8},
+        {"source": "VH", "target": "ATB", "distance": 4},
+        {"source": "VH", "target": "Novus", "distance": 5},
+        {"source": "VH", "target": "Silpo", "distance": 10}
+    ]
+}
