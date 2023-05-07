@@ -1,76 +1,53 @@
-import json
-import networkx as nx
-from ant_colony_optimizer import AntColonyOptimizer
-from graph_plot import draw_graph
-
-
-def create_graph_from_json(file_name):
-    with open(file_name) as f:
-        data = json.load(f)
-    nodes = data['nodes']
-    edges = [(edge['source'], edge['target'], {'distance': edge['distance']}) for edge in data['edges']]
-    weights = data['weights']
-    start_final_node = data['start']
-
-    G = nx.Graph()
-    G.add_nodes_from(nodes)
-    for edge in edges:
-        G.add_edge(edge[0], edge[1], distance=edge[2]['distance'])
-        G.add_edge(edge[1], edge[0], distance=edge[2]['distance'])
-
-    return G, weights, start_final_node
-
-
-def create_graph_from_hardcode():
-    nodes = ["ATB", "Novus", "Silpo", "Fora", "Velyka Kyshenya"]
-    edges = [
-        [0, 15, 20, 10, 25],
-        [15, 0, 10, 18, 30],
-        [20, 10, 0, 8, 23],
-        [10, 18, 8, 0, 15],
-        [25, 30, 23, 15, 0]
-    ]
-    weights = [7, 10, 5, 8, 3]
-    weights = {nodes[i]: weights[i] for i in range(len(nodes))}
-    h_list = [10, 17, 8, 12, 15]
-
-    G = nx.Graph()
-    G.add_nodes_from(nodes)
-    for i in range(len(nodes)):
-        for j in range(i + 1, len(nodes)):
-            G.add_edge(nodes[i], nodes[j], distance=edges[i][j])
-
-    start_final_node = "VH"
-    nodes.insert(0, start_final_node)
-    for i in range(1, len(nodes)):
-        G.add_edge(start_final_node, nodes[i], distance=h_list[i - 1])
-
-    return G, weights, start_final_node
+from service import iterations_experiment, aco_run_generated_data, aco_run_json_data, aco_run_hardcoded_data
 
 
 if __name__ == '__main__':
 
-    try:
-        file_name = 'data_ruslan.json'
-        #G, weights, start_final_node = create_graph_from_json(file_name)
-        G, weights, start_final_node = create_graph_from_hardcode()
+    # * Algorithm parameters:
+    num_of_iterations = 10
+    num_of_ants = 10
+    evaporation_rate = 0.1
+    alpha = 1
+    beta = 2
+    q = 1
 
-        aco = AntColonyOptimizer(G, weights, start_final_node, num_ants=30, evaporation_rate=0.1, alpha=1, beta=2, q=1)
-        shortest_path, shortest_path_length, iterations = aco.run(min_num_of_iterations=10)
+    # * Iterations experiment parameters:
+    nodes_num = 5
+    max_distance = 30
+    max_mass = 20
+    num_of_iterations_experiment_set = [10, 50, 90, 130, 170, 210, 250, 290, 330, 370]
 
-        draw_graph(G, shortest_path)
+    # * When data is generated:
+    # nodes, best_path, best_path_length = aco_run_generated_data()
+    # print(f'Shortest path: {best_path}')
+    # print(f'Shortest path length: {best_path_length}')
 
-        shortest_path.append(start_final_node)
-        print(f'Number of iterations: {iterations}')
-        print(f'Shortest path: {shortest_path}')
-        print(f'Shortest path length: {shortest_path_length}')
+    # * When data is read from JSON:
+    # nodes, best_path, best_path_length = aco_run_json_data()
+    # print(f'Shortest path: {best_path}')
+    # print(f'Shortest path length: {best_path_length}')
 
-    except FileNotFoundError:
-        print("File not found!")
-    except json.JSONDecodeError:
-        print("Invalid JSON format!")
-    except KeyError as e:
-        print(f"Error: Key '{e}' not found in the JSON data")
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    # * When data is hardcoded:
+    # nodes = ["ATB", "Novus", "Silpo", "Fora", "Velyka Kyshenya"]
+    # edges = [
+    #     [0, 15, 20, 10, 25],
+    #     [15, 0, 10, 18, 30],
+    #     [20, 10, 0, 8, 23],
+    #     [10, 18, 8, 0, 15],
+    #     [25, 30, 23, 15, 0]
+    # ]
+    # weights = [7, 10, 5, 8, 3]
+    # thau = [10, 17, 8, 12, 15]
+    # best_path, best_path_length = aco_run_hardcoded_data((nodes, edges, thau, weights))
+    # print(f'Shortest path: {best_path}')
+    # print(f'Shortest path length: {best_path_length}')
 
+    # * Iterations experiment usage example:
+    # iteration_experiment = iterations_experiment((num_of_ants, evaporation_rate, alpha, beta, q, num_of_iterations),
+    #                                              (nodes_num, max_distance, max_mass),
+    #                                              num_of_iterations_experiment_set)
+    # exp_iter_nums = []
+    # for el in iteration_experiment:
+    #     exp_iter_nums.append(num_of_iterations_experiment_set[el.index(min(el))])
+    # print(f'Experiment results: ')
+    # print(f"Best number of iterations for n = {nodes_num} is {max(exp_iter_nums)}")

@@ -28,13 +28,11 @@ class AntColonyOptimizer:
             self.pheromone[(u, v)] = 1.0
             self.pheromone[(v, u)] = 1.0
 
-    def run(self, min_num_of_iterations=10, threshold=0.001):
+    def run(self, num_of_iterations=10):
         shortest_path_length = float('inf')
         shortest_path = []
         iterations = 0
-        prev_shortest_path_length = 0  # initialize variable with default value
-        while iterations < min_num_of_iterations or (
-                abs((shortest_path_length - prev_shortest_path_length) / prev_shortest_path_length) >= threshold):
+        while iterations < num_of_iterations:
             iterations += 1
             paths = []
             path_lengths = []
@@ -48,8 +46,7 @@ class AntColonyOptimizer:
                 shortest_path_length = best_path_length
                 shortest_path = paths[path_lengths.index(shortest_path_length)]
             self._evaporate_pheromone()
-            prev_shortest_path_length = shortest_path_length
-        return shortest_path, shortest_path_length, iterations
+        return shortest_path, shortest_path_length
 
     def _construct_path(self):
         path = [self.start_final_node]
@@ -86,10 +83,13 @@ class AntColonyOptimizer:
 
     def _update_pheromone(self, path, path_length):
         for i in range(len(path) - 1):
-            self.pheromone[(path[i], path[i + 1])] = (1 - self.evaporation_rate) * self.pheromone[
-                (path[i], path[i + 1])] + self.q / path_length
-        self.pheromone[(path[-1], path[0])] = (1 - self.evaporation_rate) * self.pheromone[
-            (path[-1], path[0])] + self.q / path_length
+            self.pheromone[(path[i], path[i + 1])] = \
+                (1 - self.evaporation_rate) * \
+                self.pheromone[(path[i], path[i + 1])] + self.q / path_length
+
+        self.pheromone[(path[-1], path[0])] = \
+            (1 - self.evaporation_rate) * \
+            self.pheromone[(path[-1], path[0])] + self.q / path_length
 
     def _evaporate_pheromone(self):
         self.pheromone = {(u, v): (1 - self.evaporation_rate) * self.pheromone[(u, v)] for u, v in self.pheromone}

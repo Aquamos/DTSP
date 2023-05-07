@@ -1,0 +1,22 @@
+{
+    "nodes": ["VH", "ATB", "Novus", "Silpo", "Fora", "Velyka Kyshenya"],
+    "weights": {"ATB": 7, "Novus": 8, "Silpo": 10, "Fora": 5, "Velyka Kyshenya": 3},
+    "start": "VH",
+    "edges": [
+        {"source": "ATB", "target": "Silpo", "distance": 15},
+        {"source": "ATB", "target": "Fora", "distance": 20},
+        {"source": "ATB", "target": "Novus", "distance": 10},
+        {"source": "ATB", "target": "Velyka Kyshenya", "distance": 25},
+        {"source": "Silpo", "target": "Fora", "distance": 10},
+        {"source": "Silpo", "target": "Novus", "distance": 18},
+        {"source": "Silpo", "target": "Velyka Kyshenya", "distance": 30},
+        {"source": "Fora", "target": "Novus", "distance": 8},
+        {"source": "Fora", "target": "Velyka Kyshenya", "distance": 23},
+        {"source": "Novus", "target": "Velyka Kyshenya", "distance": 15},
+        {"source": "VH", "target": "ATB", "distance": 10},
+        {"source": "VH", "target": "Silpo", "distance": 17},
+        {"source": "VH", "target": "Fora", "distance": 8},
+        {"source": "VH", "target": "Novus", "distance": 12},
+        {"source": "VH", "target": "Velyka Kyshenya", "distance": 15}
+    ]
+}
